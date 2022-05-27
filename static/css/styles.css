@@ -1,0 +1,44 @@
+body{
+    font-family: 'Roboto', sans-serif;
+}
+
+
+.sectionShadow{
+    box-shadow: 0 4px 15px rgba(0,0,0,0.4);
+}
+
+.footerSection{
+    border-top-left-radius: 100%;
+    border-top-right-radius: 100%;
+}
+
+.my-slider-progress {
+    background: #ccc;
+}
+  
+.my-slider-progress-bar {
+    background: rgb(47, 255, 127);
+    height: 3px;
+    transition: width 400ms ease;
+    width: 0;
+}
+
+.customFileUpload{
+    display: inline-block;
+    padding: 6px 12px;
+    cursor: pointer;
+    background: rgb(58, 132, 192);
+    color: white;
+    font-weight: 500;
+    border: 1px solid #ccc;
+    border-radius: 20px;
+}
+
+.customNextButton{
+    background-color: red;
+    color: white;
+    font-weight: 500;
+    padding: 6px 10px;
+    border: 1px solid;
+    border-radius: 10px;
+}
