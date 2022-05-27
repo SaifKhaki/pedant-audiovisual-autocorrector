@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Pedant</title>
+        
+        <script src="https://unpkg.com/wavesurfer.js"></script>
+        
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@splidejs/splide@3.6.12/dist/css/splide.min.css">
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link
+            href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,300;0,400;0,500;0,700;0,900;1,400;1,500;1,700&display=swap"
+            rel="stylesheet">
+
+        <link rel="stylesheet" type="text/css" href="{{url_for('static', filename='css/styles.css')}}">
+
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+        <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+
+        <script src="https://cdn.tailwindcss.com"></script>
+        <script src="https://cdn.jsdelivr.net/npm/@splidejs/splide@3.6.12/dist/js/splide.min.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+        <script src="https://code.jquery.com/jquery-3.6.0.js" integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk=" crossorigin="anonymous"></script>
+        
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/css/bootstrap.min.css">
+    </head>
+    <body>
+        <div class="splide" >
+            <div class="splide__track">
+                <ul class="splide__list">
+                    <li class="splide__slide">
+                        <div class="px-4">
+                            <div class="h-96 w-full z-0">
+                                <div class="bg-gradient-to-b from-white to-green-200 h-full w-full rounded-b-3xl text-center py-6">
+                                    <h2 class="text-green-600 text-2xl text-bold font-medium">Pedant - An Audio Visual Autocorrector</h2>
+                                    <p class="text-xl font-medium mt-4 text-neutral-600">Upload your audio file to scan</p>
+                                    <div class="bg-green-300 w-48 h-0.5 mx-auto rounded my-2 mb-4"></div>
+                                </div>
+                            </div>
+                
+                            <div class="-my-48 mb-10 mx-auto flex flex-col justify-center items-center" style="overflow-y: auto !important;">
+                                <div class="w-7/12 rounded-3xl bg-white mx-auto sectionShadow " style="height: max-content;">
+                                    <form class="border border-light p-5" method="POST" action="text" enctype="multipart/form-data">
+                                        <div class="form-group">
+                                            <label for="file">Upload your file</label>
+                                            <input type="file" class="form-control-file" id="upload" name="file" />
+
+                                            <div id="waveform"></div>
+                                            <!--<audio class="mt-4" id="audioUpload" controls>
+                                                <source src="" id="srcUpload">
+                                            </audio>-->
+                                        </div>
+
+                                        <script>
+                                            // Check if the file is not csv: prompt the user that the file does not meet the conditions
+                                            $('#upload').change(function() {
+                                                var file = this.files[0];
+                                                var fileName = file.name;
+                                                var fileExtension = fileName.substr((fileName.lastIndexOf('.') + 1));
+                                                if (fileExtension != "wav") {
+                                                    $('#upload').val('');
+                                                    alert("Upload failed because the file does not have a format of wav.");
+                                                } else {
+                                                    alert("The file uploaded successfully.");
+                                                }
+                                            });
+                                        </script>
+
+                                        <button class="btn btn-secondary bg-secondary btn-block my-4" type="submit">Submit</button>
+                                    </form>  
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        
+            <!-- Add the progress bar element -->
+            <div class="my-slider-progress">
+                <div class="my-slider-progress-bar"></div>
+            </div>
+        </div>
+
+    <script>
+        var splide = new Splide( '.splide' );
+        var bar    = splide.root.querySelector( '.my-slider-progress-bar' );
+        
+        // Update the bar width:
+        splide.on( 'mounted move', function () {
+            var end = splide.Components.Controller.getEnd() + 1;
+            bar.style.width = String( 100 * ( splide.index + 1 ) / end ) + '%';
+        } );
+        
+        splide.mount();
+
+
+        let wavesurfer = WaveSurfer.create({
+            container: document.querySelector('#waveform'),
+            backend: 'MediaElement',
+            barWidth: 2,
+            barHeight: 1, // the height of the wave
+            barGap: null, // the optional spacing between bars of the wave, if not provided will be calculated in legacy format,
+            mediaControls: true,
+        });
+    
+
+        function handleFiles(event) {
+            var files = event.target.files;
+            $("#waveform").removeClass('hidden');
+            wavesurfer.load(URL.createObjectURL(files[0]));
+        }
+
+        document.getElementById("upload").addEventListener("change", handleFiles, false);
+        if($('#upload').val()){
+            $("#waveform").removeClass('hidden');
+        } else {
+            $("#waveform").addClass('hidden');
+        }
+
+    </script>
+    </body>
+</html>
